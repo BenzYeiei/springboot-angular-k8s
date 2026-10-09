@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-env-config
+  namespace: dev
+data:
+  env.js: |
+    window.env = {
+      KEYCLOAK_URL: 'http://localhost:8082',
+      KEYCLOAK_REALM: 'springbootAngularK8s',
+      KEYCLOAK_CLIENT_ID: 'shopping-car'
+    };
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: springboot-angular-k8s-frontend:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: env-config
+              mountPath: /usr/share/nginx/html/env.js
+              subPath: env.js
+      volumes:
+        - name: env-config
+          configMap:
+            name: frontend-env-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: dev
+spec:
+  type: LoadBalancer
+  selector:
+    app: frontend
+  ports:
+    - port: 4200
+      targetPort: 80

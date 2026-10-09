@@ -5,6 +5,16 @@ import { provideKeycloak, includeBearerTokenInterceptor, INCLUDE_BEARER_TOKEN_IN
 
 import { routes } from './app.routes';
 
+declare global {
+  interface Window {
+    env: { KEYCLOAK_URL: string; KEYCLOAK_REALM: string; KEYCLOAK_CLIENT_ID: string };
+  }
+}
+
+const kcUrl = window.env?.KEYCLOAK_URL ?? 'http://localhost:8082';
+const kcRealm = window.env?.KEYCLOAK_REALM ?? 'springbootAngularK8s';
+const kcClientId = window.env?.KEYCLOAK_CLIENT_ID ?? 'shopping-car';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
@@ -16,9 +26,9 @@ export const appConfig: ApplicationConfig = {
     },
     provideKeycloak({
       config: {
-        url: 'http://localhost:8082',
-        realm: 'springbootAngularK8s',
-        clientId: 'shopping-car'
+        url: kcUrl,
+        realm: kcRealm,
+        clientId: kcClientId
       },
       initOptions: {
         onLoad: 'check-sso',
