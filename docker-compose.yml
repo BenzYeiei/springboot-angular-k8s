@@ -58,13 +58,16 @@ services:
       - app-network
 
   jenkins:
-    image: jenkins/jenkins:latest
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.jenkins
     container_name: jenkins
     restart: unless-stopped
     ports:
       - "8084:8080"
       - "50000:50000"
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - jenkins_data:/var/jenkins_home
     networks:
       - app-network

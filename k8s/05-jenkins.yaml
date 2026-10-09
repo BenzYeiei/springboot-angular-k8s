@@ -30,7 +30,7 @@ spec:
         runAsUser: 1000
       containers:
         - name: jenkins
-          image: jenkins/jenkins:latest
+          image: springboot-angular-k8s-jenkins:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
@@ -38,10 +38,16 @@ spec:
           volumeMounts:
             - name: jenkins-storage
               mountPath: /var/jenkins_home
+            - name: docker-socket
+              mountPath: /var/run/docker.sock
       volumes:
         - name: jenkins-storage
           persistentVolumeClaim:
             claimName: jenkins-pvc
+        - name: docker-socket
+          hostPath:
+            path: /var/run/docker.sock
+            type: Socket
 ---
 apiVersion: v1
 kind: Service
