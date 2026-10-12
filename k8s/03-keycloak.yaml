@@ -17,7 +17,7 @@ spec:
         - name: keycloak
           image: quay.io/keycloak/keycloak:26.0
           imagePullPolicy: IfNotPresent
-          args: ["start-dev"]
+          args: ["start-dev", "--import-realm"]
           ports:
             - containerPort: 8080
           env:
@@ -54,6 +54,10 @@ spec:
               value: "false"
             - name: KC_HTTP_ENABLED
               value: "true"
+          volumeMounts:
+            - name: realm-config
+              mountPath: /opt/keycloak/data/import
+              readOnly: true
           readinessProbe:
             httpGet:
               path: /realms/master
@@ -61,6 +65,10 @@ spec:
             initialDelaySeconds: 60
             periodSeconds: 10
             failureThreshold: 10
+      volumes:
+        - name: realm-config
+          configMap:
+            name: keycloak-realm-config
 ---
 apiVersion: v1
 kind: Service

@@ -49,10 +49,10 @@ spec:
                   key: POSTGRES_PASSWORD
           volumeMounts:
             - name: postgres-storage
-              mountPath: /var/lib/postgresql/data
+              mountPath: /var/lib/postgresql
           readinessProbe:
             exec:
-              command: ["pg_isready", "-U", "admin"]
+              command: ["pg_isready", "-U", "admin", "-d", "springbootangulark8s"]
             initialDelaySeconds: 10
             periodSeconds: 5
       volumes:
