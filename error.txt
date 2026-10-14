@@ -1,0 +1,126 @@
+Started by user jennifer
+
+ > git rev-parse --resolve-git-dir /var/jenkins_home/caches/git-42d47445136671f9a75ae3f29cb095ce/.git # timeout=10
+Setting origin to https://github.com/BenzYeiei/springboot-angular-k8s.git
+ > git config remote.origin.url https://github.com/BenzYeiei/springboot-angular-k8s.git # timeout=10
+Fetching origin...
+Fetching upstream changes from origin
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+ > git config --get remote.origin.url # timeout=10
+ > git fetch --no-tags --force --progress -- origin +refs/heads/*:refs/remotes/origin/* # timeout=10
+Seen branch in repository origin/dev
+Seen branch in repository origin/main
+Seen branch in repository origin/master
+Seen branch in repository origin/sit
+Seen branch in repository origin/uat
+Seen 5 remote branches
+Obtained Jenkinsfile from 2546cb59797f3746bf39779adb92679c8286344c
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins
+ in /var/jenkins_home/workspace/t-angular-k8s-deploy-version_dev
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/t-angular-k8s-deploy-version_dev/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/BenzYeiei/springboot-angular-k8s.git # timeout=10
+Fetching without tags
+Fetching upstream changes from https://github.com/BenzYeiei/springboot-angular-k8s.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+ > git fetch --no-tags --force --progress -- https://github.com/BenzYeiei/springboot-angular-k8s.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+Checking out Revision 2546cb59797f3746bf39779adb92679c8286344c (dev)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 2546cb59797f3746bf39779adb92679c8286344c # timeout=10
+Commit message: "full-k8s"
+ > git rev-list --no-walk 2546cb59797f3746bf39779adb92679c8286344c # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Set Environment)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] echo
+Branch: dev  →  K8s namespace: dev
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build)
+[Pipeline] parallel
+[Pipeline] { (Branch: Backend)
+[Pipeline] { (Branch: Frontend)
+[Pipeline] stage
+[Pipeline] { (Backend)
+[Pipeline] stage
+[Pipeline] { (Frontend)
+[Pipeline] sh
+[Pipeline] sh
++ docker build -t springboot-angular-k8s-backend:dev-6 -f docker/Dockerfile.backend .
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+permission denied while trying to connect to the docker API at unix:///var/run/docker.sock
++ docker build -t springboot-angular-k8s-frontend:dev-6 -f docker/Dockerfile.frontend .
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+permission denied while trying to connect to the docker API at unix:///var/run/docker.sock
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+Failed in branch Backend
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+Failed in branch Frontend
+[Pipeline] // parallel
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Push Images)
+Stage "Push Images" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy to K8s)
+Stage "Deploy to K8s" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] sh
++ docker rmi springboot-angular-k8s-backend:dev-6
+permission denied while trying to connect to the docker API at unix:///var/run/docker.sock
++ true
++ docker rmi springboot-angular-k8s-frontend:dev-6
+permission denied while trying to connect to the docker API at unix:///var/run/docker.sock
++ true
+[Pipeline] echo
+Pipeline failed — branch: dev, image: dev-6
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+ERROR: script returned exit code 1
+Finished: FAILURE

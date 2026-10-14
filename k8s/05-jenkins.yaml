@@ -28,6 +28,7 @@ spec:
       securityContext:
         fsGroup: 1000
         runAsUser: 1000
+        supplementalGroups: [0]
       containers:
         - name: jenkins
           image: springboot-angular-k8s-jenkins:latest

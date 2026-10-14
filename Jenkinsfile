@@ -80,8 +80,9 @@ pipeline {
                             || kubectl create namespace ${env.DEPLOY_ENV}
 
                         # Apply all manifests with correct namespace
-                        for f in k8s/01-secrets.yaml k8s/02-postgres.yaml k8s/03-keycloak.yaml \
-                                 k8s/04-pgadmin.yaml k8s/05-jenkins.yaml \
+                        for f in k8s/01-secrets.yaml k8s/02-postgres.yaml \
+                                 k8s/03-keycloak-realm.yaml k8s/03-keycloak.yaml \
+                                 k8s/04-pgadmin.yaml \
                                  k8s/06-backend.yaml k8s/07-frontend.yaml k8s/08-ingress.yaml; do
                             sed 's/namespace: dev/namespace: ${env.DEPLOY_ENV}/g' "\$f" | kubectl apply -f -
                         done
